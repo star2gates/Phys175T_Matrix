@@ -55,10 +55,10 @@ matrix m(2);
 
 Then to assign it values use the overloaded operator **()**
 ~~~~c++
-    m(0, 0) = input_a;
-    m(0, 1) = input_b;
-    m(1, 0) = input_c;
-    m(1, 1) = input_d;
+m(0, 0) = input_a;
+m(0, 1) = input_b;
+m(1, 0) = input_c;
+m(1, 1) = input_d;
 ~~~~
 
 To get the determinant of the matrix you use **det()**, it returns a double so it can be put in to an variable if needed.
