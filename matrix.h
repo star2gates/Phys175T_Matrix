@@ -43,9 +43,9 @@ public:
     //multiplication by a number
     void operator*(double c);
     //multiplication by a vector
-    void multiplyByVector(vectors v, vectors &ab);
-    //vectors operator*(vectors);
-    //matrix operator&(vectors);
+    void multiplyByVector(vectors &, vectors &ab);
+    vectors operator*(vectors&); // this is broken
+    //matrix operator&(vectors&);
     //to access and change components
     double& operator()(int, int);
 

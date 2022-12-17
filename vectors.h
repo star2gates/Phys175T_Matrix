@@ -20,15 +20,17 @@ protected:
     int dim;
     double* data;
     double (*f)(double);
+    bool deleted = false;
 public:
+    int id=0;
     //default constructor
     vectors();
     //constructor with one integer parameter: the dimensionality
     vectors(int);
     //constructor with dimensionality and one value
     vectors(int, double);
-    vectors(double, double, double);
     vectors(double, double);
+    vectors(double, double, double);
     vectors(double (*fun)(double), int);
     vectors(double (*fun)(double), int d, double val);
     vectors(double (*fun)(double), double, double);

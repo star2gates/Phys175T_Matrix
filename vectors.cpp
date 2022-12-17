@@ -87,8 +87,16 @@ vectors::vectors(double (*fun)(double), double x, double y, double z)
 
 vectors::~vectors()
 {
-    cout << "Hi, collecting garbage ... " << endl;
-    delete []data;
+    if(deleted)
+    {
+        //cout << "Hi, garbage already collected ... vector id = " << id << endl;
+        exit(2);
+
+    } else{
+        //cout << "Hi, collecting garbage ... vector id = " << id << endl;
+        delete[] data;
+    }
+
 }
 
 double vectors::get_component(int i)
@@ -97,7 +105,7 @@ double vectors::get_component(int i)
     {
         cout << " Sorry, out of range " << endl;
         return -1;
-        exit(1);
+        //exit(1);
     }
     else
     {

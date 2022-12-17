@@ -27,6 +27,7 @@ matrix::matrix()
 
 matrix::~matrix()
 {
+    // causes segmentation fault for some reason in some cases
     for(int i = 0; i < dim; ++i)
     {
         delete [] data[i];
@@ -188,6 +189,7 @@ matrix &matrix::operator=(const matrix &w)
 
     return *this;
 }
+
 void matrix::operator*(double c)
 {
     for(int i = 0; i < dim; i++)
@@ -199,26 +201,27 @@ void matrix::operator*(double c)
     }
 }
 
-/* broken
-vectors matrix::operator*(vectors v)
+/* broken */
+vectors matrix::operator*(vectors &vt)
 {
     if(dim == 2)
     {
-        double d1 = data[0][0] * v.get_component(0) + data[0][1] * v.get_component(1);
-        double d2 = data[1][0] * v.get_component(0) + data[1][1] * v.get_component(1);
+        double d1 = data[0][0] * vt.get_component(0) + data[0][1] * vt.get_component(1);
+        double d2 = data[1][0] * vt.get_component(0) + data[1][1] * vt.get_component(1);
         x0 = d1;
         y0 = d2;
-        vectors vt(d1,d2);
-        std::cout << " vt = " << vt << std::endl;
-        return vt;
+        vectors vtt(d1,d2);
+        vtt.id=3;
+        return vtt;
     }
     if(dim == 3)
     {
-        double d1 = data[0][0] * v.get_component(0) + data[0][1] * v.get_component(1) + data[0][2] * v.get_component(2);
-        double d2 = data[1][0] * v.get_component(0) + data[1][1] * v.get_component(1) + data[1][2] * v.get_component(2);
-        double d3 = data[2][0] * v.get_component(0) + data[2][1] * v.get_component(1) + data[2][2] * v.get_component(2);
-        vectors vt(d1,d2,d3);
-        return vt;
+        double d1 = data[0][0] * vt.get_component(0) + data[0][1] * vt.get_component(1) + data[0][2] * vt.get_component(2);
+        double d2 = data[1][0] * vt.get_component(0) + data[1][1] * vt.get_component(1) + data[1][2] * vt.get_component(2);
+        double d3 = data[2][0] * vt.get_component(0) + data[2][1] * vt.get_component(1) + data[2][2] * vt.get_component(2);
+        vectors vtt(d1,d2,d3);
+        vtt.id=3;
+        return vtt;
     }
     else
     {
@@ -226,15 +229,15 @@ vectors matrix::operator*(vectors v)
         exit(1);
     }
 }
-*/
+
 /*  broken
-matrix matrix::operator&(vectors v)
+matrix matrix::operator&(vectors &vt)
 {
     if(dim == 2)
     {
         matrix mt(2,0.0);
-        double d1 = data[0][0] * v.get_component(0) + data[0][1] * v.get_component(1);
-        double d2 = data[1][0] * v.get_component(0) + data[1][1] * v.get_component(1);
+        double d1 = data[0][0] * vt.get_component(0) + data[0][1] * vt.get_component(1);
+        double d2 = data[1][0] * vt.get_component(0) + data[1][1] * vt.get_component(1);
         x0 = d1;
         y0 = d2;
         mt(0,0) = d1;
@@ -246,9 +249,9 @@ matrix matrix::operator&(vectors v)
         std::cout << " Not implemented yet! " << std::endl;
 
         matrix mt(1,3);
-        mt(0,0) = data[0][0] * v.get_component(0) + data[0][1] * v.get_component(1) + data[0][2] * v.get_component(2);
-        mt(0,1) = data[1][0] * v.get_component(0) + data[1][1] * v.get_component(1) + data[1][2] * v.get_component(2);
-        mt(0,2) = data[2][0] * v.get_component(0) + data[2][1] * v.get_component(1) + data[2][2] * v.get_component(2);
+        mt(0,0) = data[0][0] * vt.get_component(0) + data[0][1] * vt.get_component(1) + data[0][2] * vt.get_component(2);
+        mt(0,1) = data[1][0] * vt.get_component(0) + data[1][1] * vt.get_component(1) + data[1][2] * vt.get_component(2);
+        mt(0,2) = data[2][0] * vt.get_component(0) + data[2][1] * vt.get_component(1) + data[2][2] * vt.get_component(2);
         return mt;
     }
     else
@@ -258,7 +261,6 @@ matrix matrix::operator&(vectors v)
     }
 }
 */
-
 
 double matrix::det()
 {
@@ -343,12 +345,12 @@ void matrix::invert()
      */
 }
 
-void matrix::multiplyByVector(vectors v, vectors &ab)
+void matrix::multiplyByVector(vectors &vt, vectors &ab)
 {
     if(dim == 2)
     {
-        double d1 = data[0][0] * v.get_component(0) + data[0][1] * v.get_component(1);
-        double d2 = data[1][0] * v.get_component(0) + data[1][1] * v.get_component(1);
+        double d1 = data[0][0] * vt.get_component(0) + data[0][1] * vt.get_component(1);
+        double d2 = data[1][0] * vt.get_component(0) + data[1][1] * vt.get_component(1);
         x0 = d1;
         y0 = d2;
         ab[0] = d1;
@@ -356,9 +358,9 @@ void matrix::multiplyByVector(vectors v, vectors &ab)
     }
     if(dim == 3)
     {
-        double d1 = data[0][0] * v.get_component(0) + data[0][1] * v.get_component(1) + data[0][2] * v.get_component(2);
-        double d2 = data[1][0] * v.get_component(0) + data[1][1] * v.get_component(1) + data[1][2] * v.get_component(2);
-        double d3 = data[2][0] * v.get_component(0) + data[2][1] * v.get_component(1) + data[2][2] * v.get_component(2);
+        double d1 = data[0][0] * vt.get_component(0) + data[0][1] * vt.get_component(1) + data[0][2] * vt.get_component(2);
+        double d2 = data[1][0] * vt.get_component(0) + data[1][1] * vt.get_component(1) + data[1][2] * vt.get_component(2);
+        double d3 = data[2][0] * vt.get_component(0) + data[2][1] * vt.get_component(1) + data[2][2] * vt.get_component(2);
         x0 = d1;
         y0 = d2;
         z0 = d3;
