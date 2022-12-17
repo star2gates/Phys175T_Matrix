@@ -3,4 +3,4 @@ project(Phys175T_Matrix)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(Phys175T_Matrix main.cpp vectors.h vectors.cpp)
+add_executable(Phys175T_Matrix main.cpp vectors.h vectors.cpp matrix.h matrix.cpp)

@@ -10,6 +10,7 @@
 #include<fstream>
 #include<cmath>
 #include<iomanip>
+#include <limits>
 
 using namespace std;
 
@@ -71,7 +72,7 @@ public:
     void bubble_sort();
     void bubble_sort(int mode);
 
-    friend ostream& operator<<(ostream& output, vectors& w);
+    friend std::ostream& operator<<(std::ostream& output, vectors& w);
 };
 
 

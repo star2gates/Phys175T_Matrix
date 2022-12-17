@@ -166,7 +166,7 @@ vectors& vectors::operator=(const vectors& w)
 }
 
 
-ostream& operator<<(ostream& output, vectors& w)
+std::ostream& operator<<(std::ostream& output, vectors& w)
 {
     output << " [ " ;
     for(int i=0; i<w.dim-1; i++)
@@ -381,6 +381,11 @@ void vectors::applyFunction()
     {
         data[i] = f(data[i]);
     }
+}
+
+vectors::vectors(double (*fun)(double), double, double)
+{
+
 }
 
 
