@@ -55,6 +55,7 @@ matrix::matrix(int d)
     }
 }
 
+/* not working correctly
 matrix::matrix(int _m, int _n)
 {
     m = _m;
@@ -74,6 +75,7 @@ matrix::matrix(int _m, int _n)
         }
     }
 }
+*/
 
 matrix::matrix(int d, double val)
 {
@@ -94,8 +96,10 @@ matrix::matrix(int d, double val)
             data[i][j] = val;
         }
     }
+
 }
 
+/* not working correctly
 matrix::matrix(int _m, int _n, double val)
 {
     m = _m;
@@ -115,6 +119,7 @@ matrix::matrix(int _m, int _n, double val)
         }
     }
 }
+*/
 
 double matrix::get_component(int x, int y)
 {
@@ -176,6 +181,11 @@ matrix &matrix::operator=(const matrix &w)
             data[i][j] = w.data[i][j];
         }
     }
+
+    dim = w.dim;
+    mode = w.mode;
+    detValue = w.detValue;
+
     return *this;
 }
 void matrix::operator*(double c)
@@ -189,13 +199,17 @@ void matrix::operator*(double c)
     }
 }
 
+/* broken
 vectors matrix::operator*(vectors v)
 {
     if(dim == 2)
     {
         double d1 = data[0][0] * v.get_component(0) + data[0][1] * v.get_component(1);
         double d2 = data[1][0] * v.get_component(0) + data[1][1] * v.get_component(1);
+        x0 = d1;
+        y0 = d2;
         vectors vt(d1,d2);
+        std::cout << " vt = " << vt << std::endl;
         return vt;
     }
     if(dim == 3)
@@ -212,17 +226,25 @@ vectors matrix::operator*(vectors v)
         exit(1);
     }
 }
+*/
+/*  broken
 matrix matrix::operator&(vectors v)
 {
     if(dim == 2)
     {
-        matrix mt(1,2);
-        mt(0,0) = data[0][0] * v.get_component(0) + data[0][1] * v.get_component(1);
-        mt(0,1) = data[1][0] * v.get_component(0) + data[1][1] * v.get_component(1);
+        matrix mt(2,0.0);
+        double d1 = data[0][0] * v.get_component(0) + data[0][1] * v.get_component(1);
+        double d2 = data[1][0] * v.get_component(0) + data[1][1] * v.get_component(1);
+        x0 = d1;
+        y0 = d2;
+        mt(0,0) = d1;
+        mt(0,1) = d2;
         return mt;
     }
     if(dim == 3)
     {
+        std::cout << " Not implemented yet! " << std::endl;
+
         matrix mt(1,3);
         mt(0,0) = data[0][0] * v.get_component(0) + data[0][1] * v.get_component(1) + data[0][2] * v.get_component(2);
         mt(0,1) = data[1][0] * v.get_component(0) + data[1][1] * v.get_component(1) + data[1][2] * v.get_component(2);
@@ -235,6 +257,8 @@ matrix matrix::operator&(vectors v)
         exit(1);
     }
 }
+*/
+
 
 double matrix::det()
 {
@@ -242,7 +266,10 @@ double matrix::det()
     {
         double d1 = data[0][0] * data[1][1];
         double d2 = data[1][0] * data[0][1];
+
         double d0 = d1 - d2;
+        detValue = d0;
+
         if (d0==0)
         {
             std::cout << " The matrix is singular and the system of equations may not have any solution! " << std::endl;
@@ -256,6 +283,7 @@ double matrix::det()
         double d3 = data[0][2] * (data[1][0] * data[2][1] - data[2][0] * data[1][1]);
 
         double d0 = d1 - d2 + d3;
+        detValue = d0;
 
         if (d0==0)
         {
@@ -270,20 +298,30 @@ double matrix::det()
     }
 }
 
-matrix matrix::invert()
+void matrix::invert()
 {
     if(dim == 2)
     {
-        matrix mt(2);
-        mt(0,0) = data[1][1];
-        mt(0,1) = -data[0][1];
-        mt(1,0) = -data[1][0];
-        mt(1,1) = data[0][0];
-        mt * (1.0/(mt.det()));
-        return mt;
+
+        double a0 = data[1][1];
+        double a1 = -data[0][1];
+        double a2 = -data[1][0];
+        double a3 = data[0][0];
+
+        this->det();
+
+        data[0][0] = a0 * (1.0/(detValue));
+        data[0][1] = a1 * (1.0/(detValue));
+        data[1][0] = a2 * (1.0/(detValue));
+        data[1][1] = a3 * (1.0/(detValue));
+
     }
     if(dim == 3)
     {
+        std::cout << " Not implemented yet! " << std::endl;
+        this->det();
+        exit(1);
+        /*
         matrix mt(3);
         mt(0,0) = data[0][0] * data[0][0] - data[0][0] * data[0][0];
         mt(0,1) = data[0][0] * data[0][0] - data[0][0] * data[0][0];
@@ -294,15 +332,49 @@ matrix matrix::invert()
         mt(2,0) = data[0][0] * data[0][0] - data[0][0] * data[0][0];
         mt(2,1) = data[0][0] * data[0][0] - data[0][0] * data[0][0];
         mt(2,2) = data[0][0] * data[0][0] - data[0][0] * data[0][0];
-
-        return m;
+        */
     }
+    /* causes error
     else
     {
         std::cout << " I cant invert with wrong dimensionality! " << std::endl;
         exit(1);
     }
+     */
 }
+
+void matrix::multiplyByVector(vectors v, vectors &ab)
+{
+    if(dim == 2)
+    {
+        double d1 = data[0][0] * v.get_component(0) + data[0][1] * v.get_component(1);
+        double d2 = data[1][0] * v.get_component(0) + data[1][1] * v.get_component(1);
+        x0 = d1;
+        y0 = d2;
+        ab[0] = d1;
+        ab[1] = d2;
+    }
+    if(dim == 3)
+    {
+        double d1 = data[0][0] * v.get_component(0) + data[0][1] * v.get_component(1) + data[0][2] * v.get_component(2);
+        double d2 = data[1][0] * v.get_component(0) + data[1][1] * v.get_component(1) + data[1][2] * v.get_component(2);
+        double d3 = data[2][0] * v.get_component(0) + data[2][1] * v.get_component(1) + data[2][2] * v.get_component(2);
+        x0 = d1;
+        y0 = d2;
+        z0 = d3;
+        ab[0] = d1;
+        ab[1] = d2;
+        ab[2] = d3;
+    }
+    /* causes error
+    else
+    {
+        std::cout << " I cant multiply with wrong dimensionality! " << std::endl;
+        exit(1);
+    }
+     */
+}
+
 
 
 

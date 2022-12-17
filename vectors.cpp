@@ -87,8 +87,8 @@ vectors::vectors(double (*fun)(double), double x, double y, double z)
 
 vectors::~vectors()
 {
-    delete[] data;
-    //cout << "Hi, collecting garbage ... " << endl;
+    cout << "Hi, collecting garbage ... " << endl;
+    delete []data;
 }
 
 double vectors::get_component(int i)
@@ -161,6 +161,10 @@ vectors& vectors::operator=(const vectors& w)
     {
         data[i] = w.data[i];
     }
+
+    // I cant believe I forgot this for the last assignment
+    dim = w.dim;
+    f = w.f;
 
     return *this;
 }

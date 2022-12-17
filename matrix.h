@@ -18,6 +18,7 @@ protected:
     int dim, m, n;
     int mode = 0;
     double **data;
+    double detValue, x0, y0, z0;
     //double (*f)(double);
 public:
     typedef std::numeric_limits<double> dbl;
@@ -27,11 +28,11 @@ public:
     //constructor with one integer parameter: the dimensionality
     matrix(int);
     //constructor with two integer parameter: the dimensionality
-    matrix(int, int);
+    //matrix(int, int);
     //constructor with dimensionality and one value
     matrix(int, double);
     //constructor with m*n dimensionality and one value
-    matrix(int, int, double);
+    //matrix(int, int, double);
     //destructor
     ~matrix();
     //typical methods
@@ -41,16 +42,17 @@ public:
     matrix& operator=(const matrix&);
     //multiplication by a number
     void operator*(double c);
-    //multiplication by a vector return
-    vectors operator*(vectors);
-    matrix operator&(vectors);
+    //multiplication by a vector
+    void multiplyByVector(vectors v, vectors &ab);
+    //vectors operator*(vectors);
+    //matrix operator&(vectors);
     //to access and change components
     double& operator()(int, int);
 
     //calculate and return determinant or exit if singular
     double det();
     //invert the matrix
-    matrix invert();
+    void invert();
 
     // get object members
     double** getData();
