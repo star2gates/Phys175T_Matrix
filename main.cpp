@@ -83,7 +83,7 @@ void test2()
     m(1, 0) = c;
     m(1, 1) = d;
     vectors v(alpha,beta);
-    v.id=1;
+    //v.id=1;
 
     // print matrix out
     std::cout << " m = " << m << std::endl;
@@ -99,7 +99,7 @@ void test2()
 
     // multiply by vector to get solutions
     vectors xy(2);
-    xy.id=2;
+    //xy.id=2;
     m.multiplyByVector(v,xy);
     std::cout << " xy = " << xy << std::endl;
 }
